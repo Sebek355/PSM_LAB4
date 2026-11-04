@@ -1,7 +1,3 @@
-# Kalkulator Android - Jetpack Compose
-
-Responsywny kalkulator matematyczny napisany w Kotlinie przy użyciu Jetpack Compose. Aplikacja automatycznie dostosowuje swój interfejs do orientacji ekranu oraz rodzaju urządzenia (telefon/tablet), oferując klasyczny układ w pionie oraz rozbudowany tryb naukowy w poziomie. Obliczenia wspierane są przez bibliotekę `exp4j`. Aplikacja w pełni obsługuje systemowy tryb jasny i ciemny.
-
 ## Zrzuty ekranu - Tryb Ciemny
 
 ### Telefon (Pion / Poziom)
