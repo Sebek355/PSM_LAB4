@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,9 +46,40 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun getIosButtonColors(label: String, isDark: Boolean): Pair<Color, Color> {
+    val iosOrange = Color(0xFFFF9F0A)
+    val darkBg = Color.Black
+    val darkNumBg = Color(0xFF333333)
+    val darkTopBg = Color(0xFFA5A5A5)
+    val lightBg = Color(0xFFF2F2F7)
+    val lightNumBg = Color(0xFFFFFFFF)
+    val lightTopBg = Color(0xFFD1D1D6)
+
+    return when (label) {
+        "÷", "×", "-", "+", "=" -> Pair(iosOrange, Color.White)
+        "C", "Del", "(", ")" -> Pair(
+            if (isDark) darkTopBg else lightTopBg,
+            Color.Black
+        )
+        else -> Pair(
+            if (isDark) darkNumBg else lightNumBg,
+            if (isDark) Color.White else Color.Black
+        )
+    }
+}
+
+@Composable
 fun Kalkulatorscreen() {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isDark = isSystemInDarkTheme()
+
+    val mainBackgroundColor = if (isDark) Color.Black else Color.White
+    val displayBgColor = if (isDark) Color(0xFF1C1C1E) else Color.White
+    val displayBorderColor = if (isDark) Color.DarkGray else Color.LightGray
+    val displayTextColor = if (isDark) Color.White else Color.Black
+
+    val buttonBorderColor = if (isDark) Color(0xFF444444) else Color(0xFFDDDDDD)
 
     var equation by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
@@ -63,7 +96,6 @@ fun Kalkulatorscreen() {
         listOf("sin", "cos", "tan", "π"),
         listOf("√", "x^y", "ln", "e")
     )
-
 
     val onButtonClick: (String) -> Unit = { label ->
         when (label) {
@@ -87,7 +119,6 @@ fun Kalkulatorscreen() {
             }
         }
 
-
         if (label != "=" && label != "C") {
             if (equation.isEmpty()) {
                 result = ""
@@ -98,14 +129,18 @@ fun Kalkulatorscreen() {
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(mainBackgroundColor)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.3f)
                 .padding(8.dp)
-                .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp))
-                .background(Color.White, RoundedCornerShape(12.dp))
+                .border(1.dp, displayBorderColor, RoundedCornerShape(12.dp))
+                .background(displayBgColor, RoundedCornerShape(12.dp))
                 .padding(16.dp)
         ) {
             Text(
@@ -118,7 +153,7 @@ fun Kalkulatorscreen() {
 
             Text(
                 text = if (equation.isEmpty()) "0" else equation,
-                color = Color.Black,
+                color = displayTextColor,
                 fontSize = 32.sp,
                 modifier = Modifier.align(Alignment.End)
             )
@@ -138,7 +173,7 @@ fun Kalkulatorscreen() {
 
                 Text(
                     text = result,
-                    color = Color.Black,
+                    color = displayTextColor,
                     fontSize = 28.sp
                 )
             }
@@ -166,13 +201,15 @@ fun Kalkulatorscreen() {
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             for (label in row) {
+                                val (bgColor, txtColor) = getIosButtonColors(label, isDark)
                                 Button(
                                     onClick = { onButtonClick(label) },
                                     shape = RoundedCornerShape(16.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+                                    colors = ButtonDefaults.buttonColors(containerColor = bgColor),
+                                    border = BorderStroke(1.dp, buttonBorderColor),
                                     modifier = Modifier.weight(1f).fillMaxHeight()
                                 ) {
-                                    Text(text = label, color = Color.Black, fontSize = 20.sp)
+                                    Text(text = label, color = txtColor, fontSize = 20.sp)
                                 }
                             }
                         }
@@ -191,13 +228,15 @@ fun Kalkulatorscreen() {
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             for (label in row) {
+                                val (bgColor, txtColor) = getIosButtonColors(label, isDark)
                                 Button(
                                     onClick = { onButtonClick(label) },
                                     shape = RoundedCornerShape(16.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+                                    colors = ButtonDefaults.buttonColors(containerColor = bgColor),
+                                    border = BorderStroke(1.dp, buttonBorderColor),
                                     modifier = Modifier.weight(1f).fillMaxHeight()
                                 ) {
-                                    Text(text = label, color = Color.Black, fontSize = 24.sp)
+                                    Text(text = label, color = txtColor, fontSize = 24.sp)
                                 }
                             }
                         }
@@ -220,13 +259,15 @@ fun Kalkulatorscreen() {
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         for (label in row) {
+                            val (bgColor, txtColor) = getIosButtonColors(label, isDark)
                             Button(
                                 onClick = { onButtonClick(label) },
                                 shape = RoundedCornerShape(16.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+                                colors = ButtonDefaults.buttonColors(containerColor = bgColor),
+                                border = BorderStroke(1.dp, buttonBorderColor),
                                 modifier = Modifier.weight(1f).fillMaxHeight()
                             ) {
-                                Text(text = label, color = Color.Black, fontSize = 24.sp)
+                                Text(text = label, color = txtColor, fontSize = 24.sp)
                             }
                         }
                     }
@@ -237,17 +278,16 @@ fun Kalkulatorscreen() {
 }
 
 fun calculateMath(equation: String): String {
-    if (equation.isEmpty()) return "" // Zabezpieczenie przed pustym działaniem
+    if (equation.isEmpty()) return ""
 
     return try {
-        // Tłumaczymy znaki z przycisków na format zrozumiały dla biblioteki exp4j
         val preparedEquation = equation
             .replace("×", "*")
             .replace("÷", "/")
             .replace("π", "pi")
-            .replace("√", "sqrt")  // exp4j używa 'sqrt' do pierwiastków
-            .replace("x^y", "^")   // potęgowanie to po prostu znak '^'
-            .replace("ln", "log")  // logarytm naturalny w exp4j to 'log'
+            .replace("√", "sqrt")
+            .replace("x^y", "^")
+            .replace("ln", "log")
 
         val expression = ExpressionBuilder(preparedEquation).build()
         val result = expression.evaluate()
