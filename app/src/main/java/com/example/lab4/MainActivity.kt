@@ -86,7 +86,7 @@ fun Kalkulatorscreen() {
     val secondaryTextColor = if (isDark) Color(0xFF8E8E93) else Color(0xFF6E6E73)
     val buttonBorderColor = if (isDark) Color(0xFF2C2C2E) else Color(0xFFE5E5EA)
 
-    // ZAD. 1: rememberSaveable zachowuje stan po obrocie ekranu
+
     var equation by rememberSaveable { mutableStateOf("") }
     var result by rememberSaveable { mutableStateOf("") }
 
@@ -142,9 +142,9 @@ fun Kalkulatorscreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(mainBackgroundColor)
-            .safeDrawingPadding() // Chroni przed nachodzeniem na pasek stanu i gestów
+            .safeDrawingPadding()
     ) {
-        // Wyświetlacz
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -324,7 +324,6 @@ fun CalculatorButton(
     }
 }
 
-// ZAD. 2, 3, 4: Czysta funkcja obliczeniowa (bez zależności od UI)
 fun calculateMath(equation: String): String {
     if (equation.isBlank()) return ""
 
@@ -343,7 +342,6 @@ fun calculateMath(equation: String): String {
             return "Błąd"
         }
 
-        // Zaokrąglenie eliminuje błędy zmiennoprzecinkowe typu 0.1 + 0.2 = 0.30000000000000004
         val rounded = BigDecimal.valueOf(evalResult)
             .setScale(10, RoundingMode.HALF_UP)
             .stripTrailingZeros()
