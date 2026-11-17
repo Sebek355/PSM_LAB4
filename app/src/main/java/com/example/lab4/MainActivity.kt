@@ -11,6 +11,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,8 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -86,7 +86,6 @@ fun Kalkulatorscreen() {
     val secondaryTextColor = if (isDark) Color(0xFF8E8E93) else Color(0xFF6E6E73)
     val buttonBorderColor = if (isDark) Color(0xFF2C2C2E) else Color(0xFFE5E5EA)
 
-
     var equation by rememberSaveable { mutableStateOf("") }
     var result by rememberSaveable { mutableStateOf("") }
 
@@ -144,7 +143,6 @@ fun Kalkulatorscreen() {
             .background(mainBackgroundColor)
             .safeDrawingPadding()
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -306,21 +304,26 @@ fun CalculatorButton(
     onClick: () -> Unit
 ) {
     val (bgColor, txtColor) = getIosButtonColors(label, isDark)
-    Button(
+    Surface(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = bgColor),
+        color = bgColor,
         border = BorderStroke(1.dp, borderColor),
         modifier = modifier
     ) {
-        Text(
-            text = label,
-            color = txtColor,
-            fontSize = fontSize.sp,
-            fontWeight = FontWeight.Medium,
-            maxLines = 1,
-            softWrap = false
-        )
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = label,
+                color = txtColor,
+                fontSize = fontSize.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                softWrap = false
+            )
+        }
     }
 }
 
